@@ -1,7 +1,7 @@
 # slartibartfast
 Configuração do raspberry pi + octoprint
 
-# Instalação raspbian and TFT LCD Configuration
+# Install raspbian and TFT LCD Configuration
 Based on this [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/).
 ### Install image 
 Download raspbian with desktop image from [raspberrypi.org](https://www.raspberrypi.org/downloads/raspbian/)
@@ -54,6 +54,35 @@ Append to `/etc/xdg/lxsession/LXDE-pi/autostart`:
 sudo /bin/sh /etc/X11/Xsession.d/xinput_calibrator_pointercal.sh
 ```
 
+### Fix inverted touch
+Based on [this post](https://raspberrypi.stackexchange.com/questions/60872/inverted-gpio-touchscreen-using-99-calibration-conf).
+
+Download and install overlay from [waveshare-dtoverlays (github)](https://github.com/swkim01/waveshare-dtoverlays)
+```
+wget https://github.com/swkim01/waveshare-dtoverlays/raw/master/waveshare35a-overlay.dtb
+sudo cp waveshare35a-overlay.dtb /boot/overlays/
+```
+
+Edit `/boot/config.ini`, appending:
+```
+dtoverlay=waveshare35a:rotate=270,swapxy=1
+```
+
+And then reboot.
+
+### Fix inverted touch on callibration
+Edit `/usr/share/X11/xorg.conf.d/40-libinput.conf`, adding the highlighted line:
+<pre>
+Section "InputClass"
+    Identifier "libinput touchscreen catchall"
+    MatchIsTouchScreen "on"
+    MacthDevicePath "/dev/input/event*"
+    Driver "libinput"
+    <b>Option "TransformationMatrix" "0 1 0 -1 0 1 0 0 1"</b>
+EndSection
+</pre>
+
+
 ### Testing display
 To start x on the TFT display, run:
 ```
@@ -62,3 +91,4 @@ FRAMEBUFFER=/dev/fb1 startx
 
 ### Auto start on TFT display
 TBD.
+
