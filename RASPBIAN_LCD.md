@@ -1,4 +1,4 @@
-# Install raspbian and TFT LCD Configuration
+# Install raspbian and configure LCD
 Based on this [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/) and [this answer on raspberrypi stackexchange](https://raspberrypi.stackexchange.com/a/66424).
 ### Install image
 Download raspbian with desktop image from [raspberrypi.org](https://www.raspberrypi.org/downloads/raspbian/)
