@@ -38,7 +38,7 @@ git clone https://github.com/swkim01/waveshare-dtoverlays.git
 sudo cp waveshare-dtoverlays/waveshare35a-overlay.dtb /boot/overlays/
 ```
 
-Edit `/boot/config.ini`, appending:
+Edit `/boot/config.txt`, appending:
 ```
 dtoverlay=waveshare35a:rotate=270,swapxy=0
 ```
