@@ -9,6 +9,8 @@
 # updated by Tias Guns <tias@ulyssis.org>, 2010-02-15
 # updated by Koen Kooi <koen@dominion.thruhere.net>, 2012-02-28
 
+# Downloaded from http://ozzmaker.com/piscreen/xinput_calibrator_pointercal.sh on 2017-10-20.
+
 PATH="/usr/bin:$PATH"
 
 BINARY="xinput_calibrator"
