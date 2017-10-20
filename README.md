@@ -50,7 +50,9 @@ sudo cp ~/xinput_calibrator_pointercal.sh /etc/X11/Xsession.d/xinput_calibrator_
 ```
 
 Append to `/etc/xdg/lxsession/LXDE-pi/autostart`:
+```
 sudo /bin/sh /etc/X11/Xsession.d/xinput_calibrator_pointercal.sh
+```
 
 ### Testing display
 To start x on the TFT display, run:
