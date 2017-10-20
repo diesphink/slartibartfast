@@ -12,10 +12,6 @@ Edit `/boot/config.txt`, appending:
 ```
 dtoverlay=waveshare35a:rotate=270,swapxy=0
 ```
-
-And then reboot.
-
-### Callibration
 Edit `/usr/share/X11/xorg.conf.d/99-fbturbo.conf`, changing the highlighted parts (from `fbturbo` to `fbdev` and from `fb0` to `fb1`):
 <pre>
 Section "Device"
@@ -26,6 +22,11 @@ Section "Device"
 EndSection
 
 </pre>
+
+
+And then reboot.
+
+### Callibration
 
 Install dependencies:
 ```
