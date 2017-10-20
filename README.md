@@ -45,7 +45,7 @@ sudo make install
 Download and install callibration script:
 ```
 cd ~
-wget http://ozzmaker.com/piscreen/xinput_calibrator_pointercal.sh
+wget https://raw.githubusercontent.com/diesphink/slartibartfast/master/xinput_calibrator_pointercal.sh
 sudo cp ~/xinput_calibrator_pointercal.sh /etc/X11/Xsession.d/xinput_calibrator_pointercal.sh
 ```
 
