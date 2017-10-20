@@ -1,5 +1,5 @@
 # Install raspbian and configure LCD
-Based on this [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/) and [this answer on raspberrypi stackexchange](https://raspberrypi.stackexchange.com/a/66424).
+Based on this [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/), this [answer](https://raspberrypi.stackexchange.com/a/66424) on raspberrypi stackexchange and this [post](https://www.raspberrypi.org/forums/viewtopic.php?t=66184) on raspberrypi.org forums.
 ### Install image
 Download raspbian with desktop image from [raspberrypi.org](https://www.raspberrypi.org/downloads/raspbian/)
 
@@ -20,16 +20,22 @@ sudo cp waveshare-dtoverlays/waveshare35a-overlay.dtb /boot/overlays/
 
 Edit `/boot/config.ini`, appending:
 ```
-dtoverlay=waveshare35a:rotate=270,swapxy=1
+dtoverlay=waveshare35a:rotate=270,swapxy=0
 ```
 
 And then reboot.
 
 ### Callibration
-Edit `/usr/share/X11/xorg.conf.d/99-fbturbo.conf`, commenting out the following line:
-```
-# Option “fbdev” “/dev/fb0”
-```
+Edit `/usr/share/X11/xorg.conf.d/99-fbturbo.conf`, changing the highlighted parts (from `fbturbo` to `fbdev` and from `fb0` to `fb1`):
+<pre>
+Section "Device"
+        Identifier      "Allwinner A10/A13 FBDEV"
+        Driver          <b>"fbdev"</b>
+        Option          "fbdev" <b>"/dev/fb1"</b>
+        Option          "SwapbuffersWait" "true"
+EndSection
+
+</pre>
 
 Install dependencies:
 ```
@@ -69,11 +75,4 @@ EndSection
 </pre>
 
 
-### Testing display
-To start X on the TFT display, run:
-```
-FRAMEBUFFER=/dev/fb1 startx
-```
-
-### Auto start on TFT display
-TBD.
+And then reboot.
