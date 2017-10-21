@@ -1,11 +1,13 @@
 # Configure LCD
 Based on this [guide](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Setup:-Boot-to-Browser-(OctoPi-or-Jessie-Light)), this other [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/), this [answer](https://raspberrypi.stackexchange.com/a/66424) on raspberrypi stackexchange and this [post](https://www.raspberrypi.org/forums/viewtopic.php?t=66184) on raspberrypi.org forums.
 
-### Enable drivers
+### Dependencies:
 Install dependencies and needed programs:
 ```
 sudo apt-get install --no-install-recommends xinit xinput xserver-xorg xserver-xorg-video-fbdev x11-xserver-utils matchbox unclutter chromium-browser
 ```
+
+### Install and enable driver
 Download and install overlay from [waveshare-dtoverlays (github)](https://github.com/swkim01/waveshare-dtoverlays)
 ```
 git clone https://github.com/swkim01/waveshare-dtoverlays.git
@@ -17,6 +19,7 @@ Edit `/boot/config.txt`, appending:
 dtoverlay=waveshare35a:rotate=270,swapxy=0
 ```
 
+### Configure display
 Create file `/usr/share/X11/xorg.conf.d/99-fbdev.conf`, with:
 ```
 Section "Device"
@@ -43,7 +46,7 @@ sudo cp ~/TouchUI-autostart/touchui.default /etc/default/touchui
 sudo update-rc.d touchui defaults
 ```
 
-### Callibration
+### Calibration
 
 Stop TouchUI:
 
