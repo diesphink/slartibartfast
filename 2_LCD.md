@@ -1,7 +1,11 @@
 # Configure LCD
-Based on this [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/), this [answer](https://raspberrypi.stackexchange.com/a/66424) on raspberrypi stackexchange and this [post](https://www.raspberrypi.org/forums/viewtopic.php?t=66184) on raspberrypi.org forums.
+Based on this [guide](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Setup:-Boot-to-Browser-(OctoPi-or-Jessie-Light)), this other [guide](https://www.filipeflop.com/blog/como-conectar-display-lcd-tft-raspberry-pi/), this [answer](https://raspberrypi.stackexchange.com/a/66424) on raspberrypi stackexchange and this [post](https://www.raspberrypi.org/forums/viewtopic.php?t=66184) on raspberrypi.org forums.
 
 ### Enable drivers
+Install dependencies and needed programs:
+```
+sudo apt-get install --no-install-recommends xinit xinput xserver-xorg xserver-xorg-video-fbdev x11-xserver-utils matchbox unclutter chromium-browser
+```
 Download and install overlay from [waveshare-dtoverlays (github)](https://github.com/swkim01/waveshare-dtoverlays)
 ```
 git clone https://github.com/swkim01/waveshare-dtoverlays.git
@@ -12,46 +16,55 @@ Edit `/boot/config.txt`, appending:
 ```
 dtoverlay=waveshare35a:rotate=270,swapxy=0
 ```
-Edit `/usr/share/X11/xorg.conf.d/99-fbturbo.conf`, changing the highlighted parts (from `fbturbo` to `fbdev` and from `fb0` to `fb1`):
-<pre>
+
+Create file `/usr/share/X11/xorg.conf.d/99-fbdev.conf`, with:
+```
 Section "Device"
-        Identifier      "Allwinner A10/A13 FBDEV"
-        Driver          <b>"fbdev"</b>
-        Option          "fbdev" <b>"/dev/fb1"</b>
-        Option          "SwapbuffersWait" "true"
+  Identifier "touchscreen"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb1"
 EndSection
-
-</pre>
-
+```
 
 And then reboot.
 
+### Install TouchUI to launch on boot
+
+Download needed files:
+```
+git clone https://github.com/BillyBlaze/OctoPrint-TouchUI-autostart.git ~/TouchUI-autostart/		
+```
+
+Copy service file and register it as auto boot:
+```
+sudo cp ~/TouchUI-autostart/touchui.init /etc/init.d/touchui
+sudo chmod +x /etc/init.d/touchui
+sudo cp ~/TouchUI-autostart/touchui.default /etc/default/touchui
+sudo update-rc.d touchui defaults
+```
+
 ### Callibration
 
-Install dependencies:
+Stop TouchUI:
+
 ```
-sudo apt-get install libtool libx11-dev xinput autoconf libx11-dev libxi-dev x11proto-input-dev -y
+sudo service touchui stop
 ```
 
-Download, compile and install xinput_callibrator
+Install xinput-calibrator:
 ```
-git clone https://github.com/tias/xinput_calibrator
-cd xinput_calibrator/
- ./autogen.sh
-make
-sudo make install
+curl -sLS https://apt.adafruit.com/add | sudo bash
+sudo apt-get install -y xinput-calibrator
+
 ```
 
-Download and install callibration script:
+Calibrate:
 ```
-git clone https://github.com/diesphink/slartibartfast.git
-sudo cp slartibartfast/xinput_calibrator_pointercal.sh /etc/X11/Xsession.d/xinput_calibrator_pointercal.sh
+sudo xinit ~/TouchUI-autostart/calibration.xinit
 ```
 
-Append to `/etc/xdg/lxsession/LXDE-pi/autostart`:
-```
-sudo /bin/sh /etc/X11/Xsession.d/xinput_calibrator_pointercal.sh
-```
+Copy Section until Endsection into `/etc/X11/xorg.conf.d/99-calibration.conf`
+
 
 ### Fix inverted touchscreen
 Edit `/usr/share/X11/xorg.conf.d/40-libinput.conf`, adding the highlighted line:
