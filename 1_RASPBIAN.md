@@ -5,7 +5,6 @@ Download octopi from [octoprint.org](https://octopi.octoprint.org/).
 
 ### Configure wifi
 Edit file `/boot/octopi-network.txt` with network information
-```
 
 You can now boot your raspberry pi.
 
