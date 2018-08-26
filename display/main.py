@@ -10,6 +10,8 @@ import time
 import requests
 import json
 import datetime
+import os
+
 
 COLORED = 1
 UNCOLORED = 0
@@ -114,7 +116,7 @@ class Display(object):
         job_info = self.octoprintGet(API_JOB_URL)
 
         self.progress = job_info['progress']['completion']
-        self.step = int(round(self.progress/11))
+        self.step = int(self.progress/11)
         self.file = job_info['job']['file']['display'][:28]
         self.printTime = job_info['progress']['printTime']
         self.printTimeLeft = job_info['progress']['printTimeLeft']
@@ -234,6 +236,11 @@ class Display(object):
         print "[{}] {}".format(datetime.datetime.now().strftime("%H:%M:%S"), text)
 
 def main():
+    # Altera o diretório atual para o diretório do script
+    abspath = os.path.abspath(__file__)
+    dname = os.path.dirname(abspath)
+    os.chdir(dname)
+
     display = Display()
 
     while True:

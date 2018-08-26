@@ -1,0 +1,12 @@
+[Unit]
+Description=Slartibartfast Display
+After=multi-user.target
+ 
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /home/pi/slartibartfast/display/main.py
+Restart=on-abort
+WorkingDirectory=/home/pi/slartibartfast/display
+ 
+[Install]
+WantedBy=multi-user.target
