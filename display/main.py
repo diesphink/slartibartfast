@@ -79,13 +79,13 @@ def drawSensors2():
     drawPair(223, 116, "GERAL", "{0:0.0f} C".format(temp))
     drawPair(223, 150, "UMIDADE", "{0:0.0f} %".format(umid))
     
-def loadImages(prefix):
+def drawImages(prefix):
     global frame_black
     global frame_red
 
     # Exibe as imagens
-    frame_black = epd.get_frame_buffer(Image.open(prefix + '-black.bmp'))
-    frame_red = epd.get_frame_buffer(Image.open(prefix + '-red.bmp'))
+    frame_black = epd.get_frame_buffer(Image.open('images/' + prefix + '-black.bmp'))
+    frame_red = epd.get_frame_buffer(Image.open('images/' + prefix + '-red.bmp'))
 
     # Rotaciona o frame buffer igual as imagens
     epd.set_rotate(epd2in7b.ROTATE_270);
@@ -124,12 +124,12 @@ def main():
 
 
 def desconectada():
-    loadImages('desconectada')
+    drawImages('desconectada')
     drawSensors1()
     drawSensors2()
 
 def pronta(printer_status):
-    loadImages('pronta')
+    drawImages('pronta')
     drawSensors1(printer_status)
     drawSensors2()
 
@@ -158,7 +158,7 @@ def imprimindo(printer_status):
     restante = job_info['progress']['printTimeLeft']
     eta = datetime.datetime.now() + datetime.timedelta(seconds=restante)
 
-    loadImages('imprimindo-{}'.format(step))
+    drawImages('imprimindo-{}'.format(step))
     drawPair(28, 48, "STATUS", status)
     drawPair(28, 82, "ETA", eta.strftime("%H:%M"))
     drawPair(28, 116, "ARQUIVO", arquivo, font=fvalsm)
