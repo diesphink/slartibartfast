@@ -106,6 +106,8 @@ class Display(object):
 
         self.progress = job_info['progress']['completion']
         self.step = int(self.progress/11)
+        if (self.step > 8):
+            self.step = 8
         self.file = job_info['job']['file']['display'][:28]
         self.printTime = job_info['progress']['printTime']
         self.printTimeLeft = job_info['progress']['printTimeLeft']
