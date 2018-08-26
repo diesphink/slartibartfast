@@ -70,17 +70,6 @@ class Display(object):
             self._status_text = value
             self.log('** Status Text changed')
 
-    @property
-    def progress(self):
-        return self._progress
-
-    @progress.setter
-    def progress(self, value):
-        if (self._progress == None or int(round(value)) != int(round(self._progress))):
-            self.big_change = True
-            self.log('** Progress changed')
-        self._progress = value
-
     def refresh(self):
         self.log('Refreshing...')
         self.refreshSensors()
