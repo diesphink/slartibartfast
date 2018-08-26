@@ -84,8 +84,8 @@ def drawImages(prefix):
     global frame_red
 
     # Exibe as imagens
-    frame_black = epd.get_frame_buffer(Image.open('images/' + prefix + '-black.bmp'))
-    frame_red = epd.get_frame_buffer(Image.open('images/' + prefix + '-red.bmp'))
+    frame_black = epd.get_frame_buffer(Image.open('images/{}-black.bmp'.format(prefix))
+    frame_red = epd.get_frame_buffer(Image.open('images/{}-red.bmp'.format(prefix))
 
     # Rotaciona o frame buffer igual as imagens
     epd.set_rotate(epd2in7b.ROTATE_270);
