@@ -17,6 +17,10 @@ UNCOLORED = 0
 API_TOKEN = '5CB95DC15E4D4BAEB770F304A3987196'
 API_URL_BASE = 'http://localhost/'
 
+fval = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 11)
+fvalsm = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 10)
+fcapt = ImageFont.truetype('fonts/Ubuntu-B.ttf', 8)
+
 def getPrinterStatus():
     api_url = '{}{}'.format(API_URL_BASE, 'api/printer')
 
@@ -83,6 +87,9 @@ def drawImages(prefix):
     global frame_black
     global frame_red
 
+    # Zera o rotacionamento
+    epd.set_rotate(epd2in7b.ROTATE_0);
+
     # Exibe as imagens
     frame_black = epd.get_frame_buffer(Image.open('images/{}-black.bmp'.format(prefix)))
     frame_red = epd.get_frame_buffer(Image.open('images/{}-red.bmp'.format(prefix)))
@@ -93,35 +100,29 @@ def drawImages(prefix):
     ftitle = ImageFont.truetype('fonts/Ubuntu-B.ttf', 24)
     epd.draw_string_at(frame_black, 30, 6, "SLARTIBARTFAST", ftitle, UNCOLORED)
 
+def sendToScreen():
+    # Envia para a tela
+    epd.display_frame(frame_black, frame_red)
+    
     
 def main():
     global epd
-    global fval
-    global fvalsm
-    global fcapt
 
     # EPD
     epd = epd2in7b.EPD()
     epd.init()
 
-    # Fonts
-    fval = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 11)
-    fvalsm = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 10)
-    fcapt = ImageFont.truetype('fonts/Ubuntu-B.ttf', 8)
+    while True:
+        printer_status = getPrinterStatus()
 
+        if (printer_status == None):
+            desconectada()
+        elif (printer_status['state']['flags']['printing']):
+            imprimindo(printer_status)
+        else:
+            pronta(printer_status)
 
-    printer_status = getPrinterStatus()
-
-    if (printer_status == None):
-        desconectada()
-    elif (printer_status['state']['flags']['printing']):
-        imprimindo(printer_status)
-    else:
-        pronta(printer_status)
-
-    # Envia para a tela
-    epd.display_frame(frame_black, frame_red)
-
+        sendToScreen()
 
 def desconectada():
     drawImages('desconectada')
