@@ -196,7 +196,7 @@ class Display(object):
         self.drawPair(28, 150, "TRANSCORRIDO", self.formatTime(self.printTime))
         self.drawPair(105, 150, "RESTANTE", self.formatTime(self.printTimeLeft).rjust(10), x2=117)
 
-        self.epd.draw_string_at(self.frame_black, 120, 64, "{0:0.0f}".format(self.progress).rjust(2, '0'), self.fporc, COLORED)
+        self.epd.draw_string_at(self.frame_black, 120, 64, "{0:0.0f}".format(int(self.progress)).rjust(2, '0'), self.fporc, COLORED)
         self.epd.draw_string_at(self.frame_red, 145, 74, "%", self.fporc2, COLORED)
 
     def octoprintGet(self, url):
