@@ -90,7 +90,7 @@ def loadImages(prefix):
     # Rotaciona o frame buffer igual as imagens
     epd.set_rotate(epd2in7b.ROTATE_270);
 
-    ftitle = ImageFont.truetype('/home/pi/.fonts/Ubuntu-B.ttf', 24)
+    ftitle = ImageFont.truetype('fonts/Ubuntu-B.ttf', 24)
     epd.draw_string_at(frame_black, 30, 6, "SLARTIBARTFAST", ftitle, UNCOLORED)
 
     
@@ -105,9 +105,9 @@ def main():
     epd.init()
 
     # Fonts
-    fval = ImageFont.truetype('/home/pi/.fonts/UbuntuMono-R.ttf', 11)
-    fvalsm = ImageFont.truetype('/home/pi/.fonts/UbuntuMono-R.ttf', 10)
-    fcapt = ImageFont.truetype('/home/pi/.fonts/Ubuntu-B.ttf', 8)
+    fval = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 11)
+    fvalsm = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 10)
+    fcapt = ImageFont.truetype('fonts/Ubuntu-B.ttf', 8)
 
 
     printer_status = getPrinterStatus()
@@ -145,8 +145,8 @@ def formatTime(seconds):
 
 def imprimindo(printer_status):
 
-    fporc = ImageFont.truetype('/home/pi/.fonts/UbuntuMono-B.ttf', 26)
-    fporc2 = ImageFont.truetype('/home/pi/.fonts/Ubuntu-B.ttf', 10)
+    fporc = ImageFont.truetype('fonts/UbuntuMono-B.ttf', 26)
+    fporc2 = ImageFont.truetype('fonts/Ubuntu-B.ttf', 10)
 
     job_info = getJobInfo()
 
