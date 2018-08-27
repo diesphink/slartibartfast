@@ -40,7 +40,9 @@ class Display(object):
         self._status = None
         self._status_text = None
         self._progress = None
-        self._extruder = None        
+        self._extruder = None
+        self.bed = None
+        self.last_connection_try = None        
 
         # Fonts
         self.fporc = ImageFont.truetype('fonts/UbuntuMono-B.ttf', 26)
@@ -82,6 +84,15 @@ class Display(object):
             self.log('** Extruder changed')
         self._extruder = value
 
+    def connect(self):
+        ret = False
+        if (self.last_connection_try == None or (datetime.datetime.now() - self.last_connection_try).seconds > 60):
+            self.log('connect')
+            self.last_connection_try = datetime.datetime.now()
+            ret = self.octoprintPost('api/connection', {"command":"connect"})
+            if (ret):
+                time.sleep(5)
+        return ret
 
     def refresh(self):
         self.log('Refreshing...')
@@ -99,9 +110,12 @@ class Display(object):
         printer_status = self.octoprintGet(API_PRINTER_URL)
         
         if printer_status == None:
-            self.status = Display.STATUS_DISCONNECTED
-            self.extruder = None
-            self.bed = None
+            if (self.connect() == True):
+                self.refreshPrinterStatus()
+            else:
+                self.status = Display.STATUS_DISCONNECTED
+                self.extruder = None
+                self.bed = None
         else:
             if 'tool0' in printer_status['temperature']:
                 self.extruder = printer_status['temperature']['tool0']['actual']
@@ -227,6 +241,14 @@ class Display(object):
             return response.json()
         else:
             return None
+
+    def octoprintPost(self, url, data = {}):
+        api_url = '{}{}'.format(API_URL_BASE, url)
+
+        headers = {'Content-Type': 'application/json', 'X-Api-Key': API_TOKEN}
+
+        response = requests.post(api_url, headers=headers, json=data)
+        return response.status_code == 204
 
     def formatTime(self, seconds):
         ret = ''
