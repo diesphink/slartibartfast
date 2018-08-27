@@ -40,6 +40,7 @@ class Display(object):
         self._status = None
         self._status_text = None
         self._progress = None
+        self._extruder = None        
 
         # Fonts
         self.fporc = ImageFont.truetype('fonts/UbuntuMono-B.ttf', 26)
@@ -70,6 +71,18 @@ class Display(object):
             self._status_text = value
             self.log('** Status Text changed')
 
+    @property
+    def extruder(self):
+        return self._extruder
+
+    @extruder.setter
+    def extruder(self, value):
+        if (value != self._extruder and self._extruder == None):
+            self.big_change = True
+            self.log('** Extruder changed')
+        self._extruder = value
+
+
     def refresh(self):
         self.log('Refreshing...')
         self.refreshSensors()
@@ -90,8 +103,10 @@ class Display(object):
             self.extruder = None
             self.bed = None
         else:
-            self.extruder = printer_status['temperature']['tool0']['actual']
-            self.bed = printer_status['temperature']['bed']['actual']
+            if 'tool0' in printer_status['temperature']:
+                self.extruder = printer_status['temperature']['tool0']['actual']
+            if 'bed' in printer_status['temperature']:
+                self.bed = printer_status['temperature']['bed']['actual']
             self.status_text = printer_status['state']['text']
 
             if (not printer_status['state']['flags']['printing']):
@@ -161,16 +176,16 @@ class Display(object):
 
     def drawSensors(self):
         if (self.extruder == None):
-            self.drawPair(223, 48, "EXTRUS.", "N/A")
+            self.drawPair(223, 48, "EXTRUS.", "-")
         else:
-            self.drawPair(223, 48, "EXTRUS.", u"{0:0.0f}° C".format(self.extruder))
+            self.drawPair(223, 48, "EXTRUS.", u"{0:0.0f}°".format(self.extruder))
 
         if (self.bed == None):
-            self.drawPair(223, 82, "SUPERF.", "N/A")
+            self.drawPair(223, 82, "SUPERF.", "-")
         else:
-            self.drawPair(223, 82, "SUPERF.", u"{0:0.0f}° C".format(self.bed))
+            self.drawPair(223, 82, "SUPERF.", u"{0:0.0f}°".format(self.bed))
         
-        self.drawPair(223, 116, "GERAL", u"{0:0.0f}° C".format(self.temperature))
+        self.drawPair(223, 116, "GERAL", u"{0:0.0f}°".format(self.temperature))
         self.drawPair(223, 150, "UMIDADE", "{0:0.0f}%".format(self.umidity))
         
 
@@ -217,6 +232,8 @@ class Display(object):
         ret = ''
         minutos, segundos = divmod(seconds, 60)
         horas, minutos = divmod(minutos, 60)
+        if (seconds < 60):
+            return "{0:0.0f}s".format(seconds) 
         if (horas > 0):
             ret = "{0:0.0f}h ".format(horas)
         if (minutos > 0):
