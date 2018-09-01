@@ -219,6 +219,10 @@ class Display(object):
         ftitle = ImageFont.truetype('fonts/Ubuntu-B.ttf', 24)
         self.epd.draw_string_at(self.frame_black, 30, 6, "SLARTIBARTFAST", ftitle, UNCOLORED)
 
+        # Exibe a hora, para saber quando foi o último refresh
+        fclock = ImageFont.truetype('fonts/UbuntuMono-R.ttf', 8)
+        self.epd.draw_string_at(self.frame_black, 245, 30, datetime.datetime.now().strftime("%H:%M"), fclock, UNCOLORED)
+
     def drawProgressInfo(self):
 
         self.drawPair(28, 48, "STATUS", self.status_text)
